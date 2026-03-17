@@ -14,11 +14,8 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Enable Swagger
-if (app.Environment.IsDevelopment())
-{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
 
 app.UseHttpsRedirection();
 
