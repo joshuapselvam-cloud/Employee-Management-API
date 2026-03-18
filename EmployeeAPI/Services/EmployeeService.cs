@@ -1,48 +1,40 @@
 ﻿using EmployeeAPI.Models;
 using EmployeeAPI.DTOs;
-using EmployeeAPI.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.Reflection.Metadata.Ecma335;
+
 
 
 namespace EmployeeAPI.Services
 {
     public class EmployeeService
     {
-        private readonly AppDbContext _context;
+       private static List<Employee> employees = new List<Employee>();
+        private static int _id = 1;
 
-        public EmployeeService(AppDbContext context)
+        public List<Employee> GetEmployees()
         {
-            _context = context;
-
+            return employees;
         }
 
-        public async Task<List<Employee>> GetEmployees()
+        public Employee GetEmployeeById(int id)
         {
-            return await _context.Employees.ToListAsync();
+            return employees.FirstOrDefault(e => e.Id == id);
         }
 
-        public async Task<Employee?> GetEmployeeById(int id)
-        {
-            return _context.Employees.FirstOrDefault(e => e.Id == id);
-        }
-
-        public async Task<Employee> AddEmployee(EmployeeDTO dto)
+        public Employee AddEmployee(EmployeeDTO dto)
         {
             var employee = new Employee
             {
+                Id = _id++,
                 Name = dto.Name,
                 Department = dto.Department
             };
-            _context.Employees.Add(employee);
-            await _context.SaveChangesAsync();
+            employees.Add(employee);
             return employee;
         }
 
-        public async Task<Employee?> UpdateEmployee(int id, EmployeeDTO dto)
+        public Employee UpdateEmployee(int id, EmployeeDTO dto)
         {
-            var employee = _context.Employees.FirstOrDefault(e => e.Id == id);
+            var employee = employees.FirstOrDefault(e => e.Id == id);
             if (employee == null)
             {
                 return null;
@@ -52,14 +44,14 @@ namespace EmployeeAPI.Services
             return employee;
         }
 
-        public async Task<bool> DeleteEmployee(int id)
+        public bool DeleteEmployee(int id)
         {
-            var employee = _context.Employees.FirstOrDefault(e => e.Id == id);
+            var employee = employees.FirstOrDefault(e => e.Id == id);
             if (employee == null)
             {
                 return false;
             }
-            _context.Employees.Remove(employee);
+            employees.Remove(employee);
             return true;
         }
         

@@ -19,15 +19,15 @@ namespace EmployeeAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Employee>>> GetEmployees()
+        public ActionResult<List<Employee>> GetEmployees()
         {
-            return Ok(await _employeeService.GetEmployees());
+            return Ok(_employeeService.GetEmployees());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Employee>> GetEmployeeById(int id)
+        public ActionResult<Employee> GetEmployeeById(int id)
         {
-            var employee = await _employeeService.GetEmployeeById(id);
+            var employee = _employeeService.GetEmployeeById(id);
 
             if (employee == null) 
                 {
@@ -37,9 +37,9 @@ namespace EmployeeAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Employee>> AddEmployee (EmployeeDTO dTO)
+        public ActionResult<List<Employee>> AddEmployee (EmployeeDTO dTO)
         {
-            var employee = await _employeeService.AddEmployee(dTO);
+            var employee = _employeeService.AddEmployee(dTO);
             return CreatedAtAction
                 (
                     nameof(GetEmployeeById),
@@ -49,9 +49,9 @@ namespace EmployeeAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Employee>> UpdateEmployee(int id, EmployeeDTO dTO)
+        public ActionResult<Employee> UpdateEmployee(int id, EmployeeDTO dTO)
         {
-            var employee = await _employeeService.UpdateEmployee(id, dTO);
+            var employee = _employeeService.UpdateEmployee(id, dTO);
             if (employee == null)
             {
                 return NotFound();
@@ -60,9 +60,9 @@ namespace EmployeeAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmployee(int id)
+        public IActionResult DeleteEmployee(int id)
         {
-            var result = await _employeeService.DeleteEmployee(id);
+            var result = _employeeService.DeleteEmployee(id);
             if (!result)
             {
                 return NotFound();
